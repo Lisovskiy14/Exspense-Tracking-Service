@@ -1,0 +1,9 @@
+services:
+  backend:
+    build:
+      context: .
+    image: expense-tracking-service-image
+    container_name: expense-tracking-service-container
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
