@@ -1,5 +1,6 @@
 package com.example.expense_tracking_service.web;
 
+import com.example.expense_tracking_service.dto.user.UserListDto;
 import com.example.expense_tracking_service.dto.user.UserRequest;
 import com.example.expense_tracking_service.service.UserService;
 import com.example.expense_tracking_service.web.mapper.UserMapper;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +47,10 @@ public class UserController {
     public ResponseEntity<Object> getAllUsers() {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userMapper.toUserListDto(userService.getAllUsers()));
+                .body(UserListDto.builder()
+                        .users(userService.getAllUsers().stream()
+                                .map(userMapper::toUserDto)
+                                .toList())
+                        .build());
     }
 }

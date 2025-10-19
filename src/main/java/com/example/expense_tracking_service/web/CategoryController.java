@@ -1,5 +1,6 @@
 package com.example.expense_tracking_service.web;
 
+import com.example.expense_tracking_service.dto.category.CategoryListDto;
 import com.example.expense_tracking_service.dto.category.CategoryRequest;
 import com.example.expense_tracking_service.service.CategoryService;
 import com.example.expense_tracking_service.web.mapper.CategoryMapper;
@@ -45,7 +46,10 @@ public class CategoryController {
     public ResponseEntity<Object> getAllCategories() {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(categoryMapper.toCategoryListDto(
-                        categoryService.getAllCategories()));
+                .body(CategoryListDto.builder()
+                        .categories(categoryService.getAllCategories().stream()
+                                .map(categoryMapper::toCategoryDto)
+                                .toList())
+                        .build());
     }
 }

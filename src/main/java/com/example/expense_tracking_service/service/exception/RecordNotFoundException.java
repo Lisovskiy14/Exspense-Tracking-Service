@@ -1,6 +1,6 @@
 package com.example.expense_tracking_service.service.exception;
 
-public class RecordNotFoundException extends RuntimeException {
+public class RecordNotFoundException extends ResourceNotFoundException {
     private static final String RECORD_WITH_ID_IS_NOT_FOUND = "Record with id %s is not found";
 
     public RecordNotFoundException(String id) {

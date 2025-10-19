@@ -1,5 +1,6 @@
 package com.example.expense_tracking_service.dto.record;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Value;
@@ -16,6 +17,6 @@ public class RecordRequest {
     @NotBlank(message = "is required")
     String categoryId;
 
-    @NotBlank(message = "is required")
+    @DecimalMin(value = "1.0", message = "must be greater than or equal to 1.0")
     double costAmount;
 }

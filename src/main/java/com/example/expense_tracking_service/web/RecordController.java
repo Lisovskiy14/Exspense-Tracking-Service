@@ -1,5 +1,6 @@
 package com.example.expense_tracking_service.web;
 
+import com.example.expense_tracking_service.dto.record.RecordListDto;
 import com.example.expense_tracking_service.dto.record.RecordRequest;
 import com.example.expense_tracking_service.service.RecordService;
 import com.example.expense_tracking_service.web.exception.NoRequestParamsException;
@@ -52,7 +53,10 @@ public class RecordController {
         }
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(recordMapper.toRecordListDto(
-                        recordService.getFilteredRecords(userId, categoryId)));
+                .body(RecordListDto.builder()
+                        .records(recordService.getFilteredRecords(userId, categoryId).stream()
+                                .map(recordMapper::toRecordDto)
+                                .toList())
+                        .build());
     }
 }
