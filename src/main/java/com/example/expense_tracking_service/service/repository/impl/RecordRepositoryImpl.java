@@ -1,5 +1,6 @@
 package com.example.expense_tracking_service.service.repository.impl;
 
+import com.example.expense_tracking_service.domain.Category;
 import com.example.expense_tracking_service.service.exception.RecordNotFoundException;
 import com.example.expense_tracking_service.service.repository.RecordRepository;
 import com.example.expense_tracking_service.domain.Record;

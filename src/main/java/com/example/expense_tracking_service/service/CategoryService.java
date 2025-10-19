@@ -5,6 +5,7 @@ import com.example.expense_tracking_service.service.repository.CategoryRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,5 +24,9 @@ public class CategoryService {
 
     public void deleteCategoryById(UUID categoryId) {
         categoryRepository.deleteCategoryById(categoryId);
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.getAllCategories();
     }
 }

@@ -40,4 +40,12 @@ public class CategoryController {
         categoryService.deleteCategoryById(categoryId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllCategories() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(categoryMapper.toCategoryListDto(
+                        categoryService.getAllCategories()));
+    }
 }

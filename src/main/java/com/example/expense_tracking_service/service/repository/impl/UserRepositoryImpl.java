@@ -14,6 +14,19 @@ import java.util.UUID;
 public class UserRepositoryImpl implements UserRepository {
     private final Map<UUID, User> users = new HashMap<>();
 
+    {
+        UUID id1 = UUID.randomUUID();
+        users.put(id1, User.builder()
+                .id(id1)
+                .username("Igor")
+                .build());
+        UUID id2 = UUID.randomUUID();
+        users.put(id2, User.builder()
+                .id(id2)
+                .username("Dmytro")
+                .build());
+    }
+
     @Override
     public User getUserById(UUID userId) {
         if (!users.containsKey(userId)) {
