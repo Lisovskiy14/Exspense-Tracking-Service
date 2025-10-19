@@ -1,31 +1,27 @@
 package com.example.expense_tracking_service.service;
 
 import com.example.expense_tracking_service.domain.Category;
-import com.example.expense_tracking_service.service.exception.CategoryNotFoundException;
+import com.example.expense_tracking_service.service.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-    private final Map<UUID, Category> categories = new HashMap<>();
+    private final CategoryRepository categoryRepository;
 
     public Category getCategoryById(UUID categoryId) {
-        if (!categories.containsKey(categoryId)) {
-            throw new CategoryNotFoundException(categoryId.toString());
-        }
-        return categories.get(categoryId);
+        return categoryRepository.getCategoryById(categoryId);
     }
 
     public Category saveCategory(Category category) {
         category.setId(UUID.randomUUID());
-        categories.put(category.getId(), category);
-        return category;
+        return categoryRepository.saveCategory(category);
     }
 
     public void deleteCategoryById(UUID categoryId) {
-        categories.remove(categoryId);
+        categoryRepository.deleteCategoryById(categoryId);
     }
 }

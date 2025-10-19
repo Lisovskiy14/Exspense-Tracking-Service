@@ -22,7 +22,8 @@ public class CategoryController {
     public ResponseEntity<Object> getCategoryById(@PathVariable UUID categoryId) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(categoryService.getCategoryById(categoryId));
+                .body(categoryMapper.toCategoryDto(
+                        categoryService.getCategoryById(categoryId)));
     }
 
     @PostMapping

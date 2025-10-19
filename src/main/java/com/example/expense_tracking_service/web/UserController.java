@@ -36,8 +36,9 @@ public class UserController {
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserRequest userRequest) {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.saveUser(
-                        userMapper.toUser(userRequest)));
+                .body(userMapper.toUserDto(
+                        userService.saveUser(
+                                userMapper.toUser(userRequest))));
     }
 
     @GetMapping
