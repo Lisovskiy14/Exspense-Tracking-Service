@@ -1,9 +1,9 @@
 package com.example.expense_tracking_service.web.mapper;
 
 import com.example.expense_tracking_service.domain.User;
-import com.example.expense_tracking_service.dto.UserDto;
-import com.example.expense_tracking_service.dto.UserListDto;
-import com.example.expense_tracking_service.dto.UserRequest;
+import com.example.expense_tracking_service.dto.user.UserDto;
+import com.example.expense_tracking_service.dto.user.UserListDto;
+import com.example.expense_tracking_service.dto.user.UserRequest;
 import org.mapstruct.Mapper;
 
 import java.util.Collection;

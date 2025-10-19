@@ -1,4 +1,4 @@
-package com.example.expense_tracking_service.dto;
+package com.example.expense_tracking_service.dto.user;
 
 import lombok.Builder;
 import lombok.Value;

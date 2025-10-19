@@ -21,7 +21,7 @@ public class UserService {
         users.remove(userId);
     }
 
-    public User createUser(User user) {
+    public User saveUser(User user) {
         user.setId(UUID.randomUUID());
         users.put(user.getId(), user);
         return user;

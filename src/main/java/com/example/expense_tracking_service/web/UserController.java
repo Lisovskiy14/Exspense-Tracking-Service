@@ -1,12 +1,9 @@
 package com.example.expense_tracking_service.web;
 
-import com.example.expense_tracking_service.domain.User;
-import com.example.expense_tracking_service.dto.UserDto;
-import com.example.expense_tracking_service.dto.UserRequest;
+import com.example.expense_tracking_service.dto.user.UserRequest;
 import com.example.expense_tracking_service.service.UserService;
 import com.example.expense_tracking_service.web.mapper.UserMapper;
 import jakarta.validation.Valid;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +19,24 @@ public class UserController {
     public final UserMapper userMapper;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> getUserById(@RequestParam("userId") UUID userId) {
+    public ResponseEntity<Object> getUserById(@PathVariable UUID userId) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userMapper.toUserDto(
                         userService.getUserById(userId)));
     }
 
-    @DeleteMapping("/{userId")
-    public ResponseEntity<Object> deleteUserById(@RequestParam("userId") UUID userId) {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Object> deleteUserById(@PathVariable UUID userId) {
         userService.deleteUserById(userId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserRequest userRequest) {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.createUser(
+                .body(userService.saveUser(
                         userMapper.toUser(userRequest)));
     }
 
