@@ -1,7 +1,7 @@
 package com.example.expense_tracking_service.web;
 
 import com.example.expense_tracking_service.dto.category.CategoryListDto;
-import com.example.expense_tracking_service.dto.category.CategoryRequest;
+import com.example.expense_tracking_service.dto.category.CategoryRequestDto;
 import com.example.expense_tracking_service.service.CategoryService;
 import com.example.expense_tracking_service.web.mapper.CategoryMapper;
 import jakarta.validation.Valid;
@@ -28,12 +28,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
+    public ResponseEntity<Object> saveCategory(@RequestBody @Valid CategoryRequestDto categoryRequestDto) {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(categoryMapper.toCategoryDto(
                         categoryService.saveCategory(
-                                categoryMapper.toCategory(categoryRequest))));
+                                categoryMapper.toCategory(categoryRequestDto))));
     }
 
     @DeleteMapping("/{categoryId}")

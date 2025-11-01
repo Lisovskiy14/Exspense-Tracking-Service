@@ -3,7 +3,7 @@ package com.example.expense_tracking_service.service;
 import com.example.expense_tracking_service.domain.Category;
 import com.example.expense_tracking_service.domain.Record;
 import com.example.expense_tracking_service.domain.User;
-import com.example.expense_tracking_service.dto.record.RecordRequest;
+import com.example.expense_tracking_service.dto.record.RecordRequestDto;
 import com.example.expense_tracking_service.service.exception.RecordNotFoundException;
 import com.example.expense_tracking_service.service.repository.CategoryRepository;
 import com.example.expense_tracking_service.service.repository.RecordRepository;
@@ -22,6 +22,7 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final AccountService accountService;
 
     public Record getRecordById(UUID recordId) {
         Optional<Record> record = recordRepository.findById(recordId);
@@ -35,18 +36,20 @@ public class RecordService {
         recordRepository.deleteById(recordId);
     }
 
-    public Record saveRecord(RecordRequest recordRequest) {
+    public Record saveRecord(RecordRequestDto recordRequestDto) {
         User userProxy = userRepository.getReferenceById(
-                UUID.fromString(recordRequest.getUserId()));
+                UUID.fromString(recordRequestDto.getUserId()));
         Category categoryProxy = categoryRepository.getReferenceById(
-                UUID.fromString(recordRequest.getCategoryId()));
+                UUID.fromString(recordRequestDto.getCategoryId()));
 
         Record record = Record.builder()
                 .user(userProxy)
                 .category(categoryProxy)
                 .date(LocalDateTime.now())
-                .costAmount(recordRequest.getCostAmount())
+                .costAmount(recordRequestDto.getCostAmount())
                 .build();
+
+        accountService.registerAnExpense(userProxy.getId(), record.getCostAmount());
 
         return recordRepository.save(record);
     }

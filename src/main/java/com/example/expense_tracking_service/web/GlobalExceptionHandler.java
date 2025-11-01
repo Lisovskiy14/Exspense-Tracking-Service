@@ -1,6 +1,7 @@
 package com.example.expense_tracking_service.web;
 
 import com.example.expense_tracking_service.service.exception.CategoryNotFoundException;
+import com.example.expense_tracking_service.service.exception.NotEnoughMoneyException;
 import com.example.expense_tracking_service.service.exception.ResourceNotFoundException;
 import com.example.expense_tracking_service.util.RequestValidationUtil;
 import com.example.expense_tracking_service.web.exception.NoRequestParamsException;
@@ -53,6 +54,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setType(URI.create("urn:problem-type:resource-not-found"));
         problemDetail.setTitle("Resource Not Found Exception");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(problemDetail);
+    }
+
+    @ExceptionHandler(NotEnoughMoneyException.class)
+    public ResponseEntity<Object> handleNotEnoughMoney(NotEnoughMoneyException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setType(URI.create("urn:problem-type:not-enough-money"));
+        problemDetail.setTitle("Not Enough Money Exception");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(problemDetail);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        problemDetail.setType(URI.create("urn:problem-type:internal-server-error"));
+        problemDetail.setTitle("Internal Server Error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(problemDetail);
     }

@@ -12,6 +12,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AccountService accountService;
 
     public User getUserById(UUID userId) {
         Optional<User> user = userRepository.findById(userId);
@@ -26,7 +27,9 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        accountService.createAccount(user.getId());
+        return user;
     }
 
     public List<User> getAllUsers() {
