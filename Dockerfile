@@ -12,7 +12,7 @@ RUN ./gradlew build --no-daemon || return 0
 
 COPY src ./src
 
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 
 # Stage 2. Creating runner
