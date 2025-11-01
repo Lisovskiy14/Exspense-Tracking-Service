@@ -39,8 +39,7 @@ public class RecordController {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(recordMapper.toRecordDto(
-                        recordService.saveRecord(
-                                recordMapper.toRecord(recordRequest))));
+                        recordService.saveRecord(recordRequest)));
     }
 
     @GetMapping
