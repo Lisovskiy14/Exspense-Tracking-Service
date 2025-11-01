@@ -1,7 +1,7 @@
 package com.example.expense_tracking_service.web;
 
 import com.example.expense_tracking_service.dto.record.RecordListDto;
-import com.example.expense_tracking_service.dto.record.RecordRequest;
+import com.example.expense_tracking_service.dto.record.RecordRequestDto;
 import com.example.expense_tracking_service.service.RecordService;
 import com.example.expense_tracking_service.web.exception.NoRequestParamsException;
 import com.example.expense_tracking_service.web.mapper.RecordMapper;
@@ -35,12 +35,11 @@ public class RecordController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveRecord(@RequestBody @Valid RecordRequest recordRequest) {
+    public ResponseEntity<Object> saveRecord(@RequestBody @Valid RecordRequestDto recordRequestDto) {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(recordMapper.toRecordDto(
-                        recordService.saveRecord(
-                                recordMapper.toRecord(recordRequest))));
+                        recordService.saveRecord(recordRequestDto)));
     }
 
     @GetMapping

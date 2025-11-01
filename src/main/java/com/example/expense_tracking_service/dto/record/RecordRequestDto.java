@@ -9,7 +9,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-public class RecordRequest {
+public class RecordRequestDto {
 
     @NotBlank(message = "is required")
     String userId;

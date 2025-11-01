@@ -2,7 +2,7 @@ package com.example.expense_tracking_service.web.mapper;
 
 import com.example.expense_tracking_service.domain.Category;
 import com.example.expense_tracking_service.dto.category.CategoryDto;
-import com.example.expense_tracking_service.dto.category.CategoryRequest;
+import com.example.expense_tracking_service.dto.category.CategoryRequestDto;
 import org.mapstruct.Mapper;
 
 
@@ -10,5 +10,5 @@ import org.mapstruct.Mapper;
 public interface CategoryMapper {
 
     CategoryDto toCategoryDto(Category category);
-    Category toCategory(CategoryRequest categoryRequest);
+    Category toCategory(CategoryRequestDto categoryRequestDto);
 }

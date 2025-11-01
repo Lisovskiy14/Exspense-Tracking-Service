@@ -8,18 +8,22 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categories")
-public class Category {
+@Table(name = "accounts")
+public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID userId;
 
-    @Column(unique = true)
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private double balance = 0;
 }

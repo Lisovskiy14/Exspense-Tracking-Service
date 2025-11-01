@@ -1,34 +1,60 @@
 package com.example.expense_tracking_service.service;
 
+import com.example.expense_tracking_service.domain.Category;
 import com.example.expense_tracking_service.domain.Record;
+import com.example.expense_tracking_service.domain.User;
+import com.example.expense_tracking_service.dto.record.RecordRequestDto;
+import com.example.expense_tracking_service.service.exception.RecordNotFoundException;
+import com.example.expense_tracking_service.service.repository.CategoryRepository;
 import com.example.expense_tracking_service.service.repository.RecordRepository;
+import com.example.expense_tracking_service.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class RecordService {
     private final RecordRepository recordRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final AccountService accountService;
 
     public Record getRecordById(UUID recordId) {
-        return recordRepository.getRecordById(recordId);
+        Optional<Record> record = recordRepository.findById(recordId);
+        if (record.isEmpty()) {
+            throw new RecordNotFoundException(recordId.toString());
+        }
+        return record.get();
     }
 
     public void deleteRecordById(UUID recordId) {
-        recordRepository.deleteRecordById(recordId);
+        recordRepository.deleteById(recordId);
     }
 
-    public Record saveRecord(Record record) {
-        record.setId(UUID.randomUUID());
-        record.setDate(LocalDateTime.now());
-        return recordRepository.saveRecord(record);
+    public Record saveRecord(RecordRequestDto recordRequestDto) {
+        User userProxy = userRepository.getReferenceById(
+                UUID.fromString(recordRequestDto.getUserId()));
+        Category categoryProxy = categoryRepository.getReferenceById(
+                UUID.fromString(recordRequestDto.getCategoryId()));
+
+        Record record = Record.builder()
+                .user(userProxy)
+                .category(categoryProxy)
+                .date(LocalDateTime.now())
+                .costAmount(recordRequestDto.getCostAmount())
+                .build();
+
+        accountService.registerAnExpense(userProxy.getId(), record.getCostAmount());
+
+        return recordRepository.save(record);
     }
 
     public List<Record> getFilteredRecords(UUID userId, UUID categoryId) {
-        return recordRepository.getFilteredRecords(userId, categoryId);
+        return recordRepository.findRecordByUserIdOrCategoryId(userId, categoryId);
     }
 }
