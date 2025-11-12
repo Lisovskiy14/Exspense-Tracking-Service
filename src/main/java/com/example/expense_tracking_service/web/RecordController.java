@@ -3,8 +3,6 @@ package com.example.expense_tracking_service.web;
 import com.example.expense_tracking_service.dto.record.RecordListDto;
 import com.example.expense_tracking_service.dto.record.RecordRequestDto;
 import com.example.expense_tracking_service.service.RecordService;
-import com.example.expense_tracking_service.service.impl.RecordServiceImpl;
-import com.example.expense_tracking_service.web.exception.NoRequestParamsException;
 import com.example.expense_tracking_service.web.mapper.RecordMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +24,6 @@ public class RecordController {
             @RequestParam(value = "userId", required = false) UUID userId,
             @RequestParam(value = "categoryId", required = false) UUID categoryId
     ) {
-        if (userId == null && categoryId == null) {
-            throw new NoRequestParamsException();
-        }
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(RecordListDto.builder()

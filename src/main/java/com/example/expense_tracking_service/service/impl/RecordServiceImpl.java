@@ -27,6 +27,9 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<Record> getFilteredRecords(UUID userId, UUID categoryId) {
+        if (userId == null && categoryId == null) {
+            return recordRepository.findAll();
+        }
         return recordRepository.findRecordByUserIdOrCategoryId(userId, categoryId);
     }
 
