@@ -1,7 +1,5 @@
 package com.example.expense_tracking_service.web;
 
-import com.example.expense_tracking_service.domain.Account;
-import com.example.expense_tracking_service.dto.account.AccountDto;
 import com.example.expense_tracking_service.dto.account.TopUpAccountRequestDto;
 import com.example.expense_tracking_service.service.AccountService;
 import com.example.expense_tracking_service.web.mapper.AccountMapper;
@@ -16,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/accounts")
+@RequestMapping("/api/v1/accounts")
 public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
@@ -34,15 +32,15 @@ public class AccountController {
     public ResponseEntity<Object> getAccountById(@PathVariable UUID accountId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(accountMapper.toAccountDto(accountService.getAccountById(accountId)));
+                .body(accountMapper.toAccountDto(
+                        accountService.getAccountById(accountId)));
     }
 
     @PutMapping
     public ResponseEntity<Object> topUpAccount(@Valid @RequestBody TopUpAccountRequestDto topUpAccountRequestDto) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(accountMapper.toAccountDto(accountService.topUpAccount(topUpAccountRequestDto)));
+                .body(accountMapper.toAccountDto(
+                        accountService.topUpAccount(topUpAccountRequestDto)));
     }
-
-
 }

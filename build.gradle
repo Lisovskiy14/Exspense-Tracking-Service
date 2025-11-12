@@ -7,6 +7,7 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'Application for expense tracking'
+def jjwtVersion = '0.12.5'
 
 java {
 	toolchain {
@@ -26,10 +27,14 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:3.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.mapstruct:mapstruct:1.6.3'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.6'
     implementation 'org.postgresql:postgresql:42.7.8'
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'

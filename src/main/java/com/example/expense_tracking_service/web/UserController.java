@@ -1,10 +1,8 @@
 package com.example.expense_tracking_service.web;
 
 import com.example.expense_tracking_service.dto.user.UserListDto;
-import com.example.expense_tracking_service.dto.user.UserRequestDto;
 import com.example.expense_tracking_service.service.UserService;
 import com.example.expense_tracking_service.web.mapper.UserMapper;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +12,21 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     public final UserService userService;
     public final UserMapper userMapper;
+
+    @GetMapping
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(UserListDto.builder()
+                        .users(userService.getAllUsers().stream()
+                                .map(userMapper::toUserDto)
+                                .toList())
+                        .build());
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getUserById(@PathVariable UUID userId) {
@@ -31,25 +40,5 @@ public class UserController {
     public ResponseEntity<Object> deleteUserById(@PathVariable UUID userId) {
         userService.deleteUserById(userId);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping
-    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserRequestDto userRequestDto) {
-        return ResponseEntity.status(201)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(userMapper.toUserDto(
-                        userService.saveUser(
-                                userMapper.toUser(userRequestDto))));
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> getAllUsers() {
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(UserListDto.builder()
-                        .users(userService.getAllUsers().stream()
-                                .map(userMapper::toUserDto)
-                                .toList())
-                        .build());
     }
 }

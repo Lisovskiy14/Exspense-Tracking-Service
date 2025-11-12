@@ -3,6 +3,7 @@ package com.example.expense_tracking_service.web;
 import com.example.expense_tracking_service.dto.record.RecordListDto;
 import com.example.expense_tracking_service.dto.record.RecordRequestDto;
 import com.example.expense_tracking_service.service.RecordService;
+import com.example.expense_tracking_service.service.impl.RecordServiceImpl;
 import com.example.expense_tracking_service.web.exception.NoRequestParamsException;
 import com.example.expense_tracking_service.web.mapper.RecordMapper;
 import jakarta.validation.Valid;
@@ -15,32 +16,10 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/records")
+@RequestMapping("/api/v1/records")
 public class RecordController {
     private final RecordService recordService;
     private final RecordMapper recordMapper;
-
-    @GetMapping("/{recordId}")
-    public ResponseEntity<Object> getRecordById(@PathVariable UUID recordId) {
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(recordMapper.toRecordDto(
-                        recordService.getRecordById(recordId)));
-    }
-
-    @DeleteMapping("/{recordId}")
-    public ResponseEntity<Object> deleteRecordById(@PathVariable UUID recordId) {
-        recordService.deleteRecordById(recordId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping
-    public ResponseEntity<Object> saveRecord(@RequestBody @Valid RecordRequestDto recordRequestDto) {
-        return ResponseEntity.status(201)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(recordMapper.toRecordDto(
-                        recordService.saveRecord(recordRequestDto)));
-    }
 
     @GetMapping
     public ResponseEntity<Object> getFilteredRecords(
@@ -57,5 +36,27 @@ public class RecordController {
                                 .map(recordMapper::toRecordDto)
                                 .toList())
                         .build());
+    }
+
+    @GetMapping("/{recordId}")
+    public ResponseEntity<Object> getRecordById(@PathVariable UUID recordId) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(recordMapper.toRecordDto(
+                        recordService.getRecordById(recordId)));
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> saveRecord(@RequestBody @Valid RecordRequestDto recordRequestDto) {
+        return ResponseEntity.status(201)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(recordMapper.toRecordDto(
+                        recordService.createRecord(recordRequestDto)));
+    }
+
+    @DeleteMapping("/{recordId}")
+    public ResponseEntity<Object> deleteRecordById(@PathVariable UUID recordId) {
+        recordService.deleteRecordById(recordId);
+        return ResponseEntity.noContent().build();
     }
 }

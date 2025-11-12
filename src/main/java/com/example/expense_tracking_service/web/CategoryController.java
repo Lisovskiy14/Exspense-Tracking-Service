@@ -14,10 +14,21 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/categories")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
+
+    @GetMapping
+    public ResponseEntity<Object> getAllCategories() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(CategoryListDto.builder()
+                        .categories(categoryService.getAllCategories().stream()
+                                .map(categoryMapper::toCategoryDto)
+                                .toList())
+                        .build());
+    }
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<Object> getCategoryById(@PathVariable UUID categoryId) {
@@ -32,7 +43,7 @@ public class CategoryController {
         return ResponseEntity.status(201)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(categoryMapper.toCategoryDto(
-                        categoryService.saveCategory(
+                        categoryService.createCategory(
                                 categoryMapper.toCategory(categoryRequestDto))));
     }
 
@@ -40,16 +51,5 @@ public class CategoryController {
     public ResponseEntity<Object> deleteCategoryById(@PathVariable UUID categoryId) {
         categoryService.deleteCategoryById(categoryId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> getAllCategories() {
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(CategoryListDto.builder()
-                        .categories(categoryService.getAllCategories().stream()
-                                .map(categoryMapper::toCategoryDto)
-                                .toList())
-                        .build());
     }
 }
